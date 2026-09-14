@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= profile.name %> — Portfolio</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="navbar" id="navbar">
+    <a href="#home" class="logo">
+        <%= profile.name %>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+        <a href="/admin" class="nav-admin-btn">Admin Portal</a>
+    </nav>
+
+    <button class="menu" id="menuButton" aria-label="Toggle navigation menu">
+        ☰
+    </button>
+</header>
+
+<main>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="hero-content reveal">
+            <p class="eyebrow">
+                COMPUTER SCIENCE • 01
+            </p>
+
+            <h1>
+                <%= profile.name %>
+            </h1>
+
+            <h2>
+                <%= profile.title %>
+            </h2>
+
+            <p class="hero-description">
+                <%= profile.bio %>
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#projects" class="button">
+                    Explore My Work
+                </a>
+                <a href="#contact" class="button secondary">
+                    Let's Connect
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual reveal">
+            <div class="visual-back"></div>
+            <div class="visual-card">
+                <div class="initial">
+                    <%= (profile.name && profile.name.trim().length > 0) ? profile.name.trim().charAt(0).toUpperCase() : 'S' %>
+                </div>
+                <span>
+                    CSE CORE • FIRST YEAR
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="section" id="about">
+        <p class="label">
+            01 — ABOUT
+        </p>
+
+        <h2 class="section-title reveal">
+            A little about me.
+        </h2>
+
+        <div class="about-grid reveal">
+            <div class="about-main">
+                I'm a Computer Science student who enjoys learning,
+                building projects and exploring the world of technology.
+            </div>
+
+            <div class="about-side">
+                <p>
+                    I'm currently pursuing Computer Science Engineering
+                    with a focus on building a strong foundation in
+                    programming and software development.
+                </p>
+                <p>
+                    I enjoy working with modern web technologies, backend architectures,
+                    and I am steadily sharpening my skills toward becoming
+                    an impactful full-stack developer.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section class="section" id="skills">
+        <p class="label">
+            02 — SKILLS
+        </p>
+
+        <h2 class="section-title reveal">
+            Tools I work with.
+        </h2>
+
+        <div class="skills reveal">
+            <% if (skills && skills.length > 0) { %>
+                <% skills.forEach(function(skill) { %>
+                    <div class="skill">
+                        <%= skill.name %>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p class="empty-note">No skills added yet.</p>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section class="section" id="projects">
+        <p class="label">
+            03 — PROJECTS
+        </p>
+
+        <h2 class="section-title reveal">
+            Selected work.
+        </h2>
+
+        <div class="projects">
+            <% if (projects && projects.length > 0) { %>
+                <% projects.forEach(function(project, index) { %>
+                    <article class="project reveal">
+                        <span class="project-number">
+                            PROJECT <%= String(index + 1).padStart(2, '0') %>
+                        </span>
+
+                        <h3>
+                            <%= project.title %>
+                        </h3>
+
+                        <p>
+                            <%= project.description %>
+                        </p>
+
+                        <% if (project.technologies) { %>
+                            <span class="tech">
+                                <%= project.technologies %>
+                            </span>
+                        <% } %>
+
+                        <% if (project.github) { %>
+                            <a href="<%= project.github %>" target="_blank" rel="noopener noreferrer" class="project-link">
+                                View project →
+                            </a>
+                        <% } %>
+                    </article>
+                <% }); %>
+            <% } else { %>
+                <p class="empty-note">No projects added yet.</p>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- EDUCATION SECTION -->
+    <section class="section" id="education">
+        <p class="label">
+            04 — EDUCATION
+        </p>
+
+        <h2 class="section-title reveal">
+            Where I'm learning.
+        </h2>
+
+        <div class="education-wrapper reveal">
+            <div class="education-line"></div>
+            <div class="education">
+                <p class="year">
+                    2026 — PRESENT
+                </p>
+                <h3>
+                    Computer Science Engineering
+                </h3>
+                <p>
+                    CSE Core
+                </p>
+                <p>
+                    First Year Student
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="contact" id="contact">
+        <p class="label">
+            05 — CONTACT
+        </p>
+
+        <h2 class="section-title reveal">
+            Let's build something interesting.
+        </h2>
+
+        <p class="contact-text reveal">
+            I'm always open to learning, collaborating on innovative projects, and
+            connecting with people passionate about technology.
+        </p>
+
+        <div class="contact-links reveal">
+            <% if (profile.email) { %>
+                <a href="mailto:<%= profile.email %>">
+                    <%= profile.email %>
+                </a>
+            <% } %>
+
+            <% if (profile.github) { %>
+                <a href="<%= profile.github %>" target="_blank" rel="noopener noreferrer">
+                    GitHub →
+                </a>
+            <% } %>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-content">
+        <p>© 2026 <%= profile.name %> · Built with curiosity & code</p>
+        <p class="footer-admin"><a href="/admin">Admin Management</a></p>
+    </div>
+</footer>
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>
