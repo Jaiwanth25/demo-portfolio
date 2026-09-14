@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — <%= profile ? profile.name : "Portfolio" %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: var(--green);
+            color: #fff;
+            padding: 24px 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dashboard-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 26px;
+            color: #fff;
+        }
+        .dashboard-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .btn-header {
+            padding: 8px 18px;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .btn-header:hover {
+            background: #fff;
+            color: var(--green);
+        }
+        .btn-header.danger {
+            border-color: #e74c3c;
+            color: #ff7675;
+        }
+        .btn-header.danger:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .dashboard-body {
+            padding: 50px 8% 100px;
+            max-width: 1300px;
+            margin: auto;
+        }
+        .grid-dash {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .card-dash {
+            background: var(--white);
+            padding: 35px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(23,60,49,0.03);
+        }
+        .card-dash h3 {
+            font-family: "DM Serif Display", serif;
+            font-size: 26px;
+            color: var(--green);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: var(--green-2);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            background: var(--cream);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--green);
+            background: #fff;
+        }
+        .btn-action {
+            padding: 12px 24px;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-action:hover {
+            background: var(--green-2);
+            transform: translateY(-1px);
+        }
+
+        .skill-tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .skill-tag-item {
+            background: var(--cream-2);
+            padding: 8px 14px;
+            font-size: 13px;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .skill-tag-delete {
+            color: #c0392b;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 15px;
+            line-height: 1;
+        }
+        .skill-tag-delete:hover {
+            opacity: 0.7;
+        }
+
+        .project-dash-item {
+            padding: 20px;
+            border: 1px solid var(--border);
+            background: var(--cream);
+            border-radius: 12px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .project-dash-title {
+            font-weight: 600;
+            color: var(--green);
+            font-size: 16px;
+        }
+        .project-dash-tech {
+            font-size: 11px;
+            color: var(--green-2);
+            margin-top: 4px;
+        }
+        .project-dash-desc {
+            font-size: 12px;
+            color: #555;
+            margin-top: 6px;
+        }
+        .btn-delete {
+            background: #fdf0ee;
+            color: #c0392b;
+            border: 1px solid rgba(192, 57, 43, 0.3);
+            padding: 6px 12px;
+            font-size: 11px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        .btn-delete:hover {
+            background: #c0392b;
+            color: #fff;
+        }
+
+        .alert-box {
+            padding: 14px 20px;
+            font-size: 13px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .alert-success {
+            background: #eafaf1;
+            color: #27ae60;
+            border-left: 4px solid #27ae60;
+        }
+        .alert-error {
+            background: #fdf0ee;
+            color: #c0392b;
+            border-left: 4px solid #c0392b;
+        }
+    </style>
+</head>
+<body class="loaded">
+
+    <header class="dashboard-header">
+        <div class="dashboard-title">
+            CMS Dashboard · <%= profile ? profile.name : "Portfolio" %>
+        </div>
+        <div class="dashboard-actions">
+            <a href="/" target="_blank" class="btn-header">View Live Site ↗</a>
+            <a href="/logout" class="btn-header danger">Logout</a>
+        </div>
+    </header>
+
+    <div class="dashboard-body">
+
+        <% if (message) { %>
+            <div class="alert-box alert-success">
+                ✓ <%= message %>
+            </div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="alert-box alert-error">
+                ⚠ <%= error %>
+            </div>
+        <% } %>
+
+        <div class="grid-dash">
+            <!-- LEFT COLUMN: Profile & Projects -->
+            <div class="col-left">
+
+                <!-- PROFILE EDIT CARD -->
+                <div class="card-dash">
+                    <h3>Edit Profile Details</h3>
+                    <form action="/update-profile" method="POST">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-input" value="<%= profile ? profile.name : '' %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Professional Subtitle / Tagline</label>
+                            <input type="text" name="title" class="form-input" value="<%= profile ? profile.title : '' %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hero Bio / Introduction</label>
+                            <textarea name="bio" class="form-textarea" required><%= profile ? profile.bio : '' %></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" name="email" class="form-input" value="<%= profile ? profile.email : '' %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">GitHub URL</label>
+                            <input type="url" name="github" class="form-input" value="<%= profile ? profile.github : '' %>">
+                        </div>
+                        <button type="submit" class="btn-action">Save Profile Changes</button>
+                    </form>
+                </div>
+
+                <!-- ADD PROJECT CARD -->
+                <div class="card-dash">
+                    <h3>Add New Project</h3>
+                    <form action="/add-project" method="POST">
+                        <div class="form-group">
+                            <label class="form-label">Project Title</label>
+                            <input type="text" name="title" class="form-input" placeholder="e.g. AI Content Summarizer" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-textarea" placeholder="Describe the core features, purpose, and impact..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tech Stack (comma-separated)</label>
+                            <input type="text" name="technologies" class="form-input" placeholder="e.g. Node.js, Express, PostgreSQL, TailwindCSS">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">GitHub Repository / Live Demo URL</label>
+                            <input type="url" name="github" class="form-input" placeholder="https://github.com/...">
+                        </div>
+                        <button type="submit" class="btn-action">+ Add Project</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Skills & Security -->
+            <div class="col-right">
+
+                <!-- SKILLS MANAGEMENT CARD -->
+                <div class="card-dash">
+                    <h3>Manage Skills</h3>
+                    <div class="skill-tag-list">
+                        <% if (skills && skills.length > 0) { %>
+                            <% skills.forEach(function(s) { %>
+                                <div class="skill-tag-item">
+                                    <span><%= s.name %></span>
+                                    <a href="/delete-skill/<%= s.id %>" class="skill-tag-delete" title="Delete skill" onclick="return confirm('Remove <%= s.name %>?');">×</a>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <p style="font-size: 13px; color: #888;">No skills added yet.</p>
+                        <% } %>
+                    </div>
+
+                    <form action="/add-skill" method="POST" style="display: flex; gap: 10px;">
+                        <input type="text" name="skill" class="form-input" placeholder="e.g. React, Docker, Spring Boot" required style="flex: 1;">
+                        <button type="submit" class="btn-action">+ Add</button>
+                    </form>
+                </div>
+
+                <!-- EXISTING PROJECTS LIST -->
+                <div class="card-dash">
+                    <h3>Current Projects (<%= projects ? projects.length : 0 %>)</h3>
+                    <% if (projects && projects.length > 0) { %>
+                        <% projects.forEach(function(proj) { %>
+                            <div class="project-dash-item">
+                                <div>
+                                    <div class="project-dash-title"><%= proj.title %></div>
+                                    <div class="project-dash-tech"><%= proj.technologies %></div>
+                                    <div class="project-dash-desc"><%= proj.description %></div>
+                                </div>
+                                <div>
+                                    <a href="/delete-project/<%= proj.id %>" class="btn-delete" onclick="return confirm('Are you sure you want to delete <%= proj.title %>?');">Delete</a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <p style="font-size: 13px; color: #888;">No projects currently registered.</p>
+                    <% } %>
+                </div>
+
+                <!-- ADMIN PASSWORD CARD -->
+                <div class="card-dash" id="password">
+                    <h3>Change Password</h3>
+                    <form action="/change-password" method="POST">
+                        <div class="form-group">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" name="current_password" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <input type="password" name="new_password" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" name="confirm_password" class="form-input" required>
+                        </div>
+                        <button type="submit" class="btn-action">Update Password</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
